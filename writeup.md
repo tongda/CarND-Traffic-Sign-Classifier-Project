@@ -22,21 +22,8 @@ The goals / steps of this project are the following:
 [sign3]: ./downloaded/3.jpg "Traffic Sign 3"
 [sign4]: ./downloaded/4.jpg "Traffic Sign 4"
 [sign5]: ./downloaded/5.jpg "Traffic Sign 5"
-[sign6]: ./downloaded/6.jpg "Traffic Sign 6"
-[sign7]: ./downloaded/7.jpg "Traffic Sign 7"
-[sign8]: ./downloaded/8.jpg "Traffic Sign 8"
-[sign9]: ./downloaded/9.jpg "Traffic Sign 9"
-[sign10]: ./downloaded/10.jpg "Traffic Sign 10"
-[sign1-r]: ./downloaded/1-r.jpg "Traffic Sign 1 Resized"
-[sign2-r]: ./downloaded/2-r.jpg "Traffic Sign 2 Resized"
-[sign3-r]: ./downloaded/3-r.jpg "Traffic Sign 3 Resized"
-[sign4-r]: ./downloaded/4-r.jpg "Traffic Sign 4 Resized"
-[sign5-r]: ./downloaded/5-r.jpg "Traffic Sign 5 Resized"
-[sign6-r]: ./downloaded/6-r.jpg "Traffic Sign 6 Resized"
-[sign7-r]: ./downloaded/7-r.jpg "Traffic Sign 7 Resized"
-[sign8-r]: ./downloaded/8-r.jpg "Traffic Sign 8 Resized"
-[sign9-r]: ./downloaded/9-r.jpg "Traffic Sign 9 Resized"
-[sign10-r]: ./downloaded/10-r.jpg "Traffic Sign 10 Resized"
+[model_graph]: ./model_graph.png "Model Graph"
+[top5]: ./top5result.png "Top 5 Prediction Results"
 
 ## Rubric Points
 
@@ -99,223 +86,84 @@ My final model consisted of the following layers:
 | Layer         		| Sublayer  |     Description	        					|
 |:---------------------:|:-:|:---------------------------------------------:|
 | Input         		| | 32x32x3 RGB image   							|
-| Inception (branch 1x1)     	| Convolution 1x1	| 1x1 stride, outputs 32x32x16  |
+| Inception (branch 1x1)     	| Convolution 1x1	| 2x2 stride, outputs 16x16x16  |
 |     	| Batch Normalization	| 0.9997 Moving Average Decay  |
-|     	| RELU	|   |
+|     	| ELU	|   |
 | Inception (branch 3x3)      | Convolution 1x1	| 1x1 stride, outputs 32x32x16 |
 |     	| Batch Normalization	| 0.9997 Moving Average Decay  |
-|     	| RELU	|   |
-|     	| Convolution 3x3 | 1x1 stride, outputs 32x32x32 |
-|     	| Batch Normalization	| 0.9997 Moving Average Decay  |
-|     	| RELU	|   |
-|       | Convolution 3x3 | 1x1 stride, outputs 32x32x32 |
-|     	| Batch Normalization	| 0.9997 Moving Average Decay  |
-|     	| RELU	|   |
-| Inception (branch 5x5)      | Convolution 1x1	| 1x1 stride, outputs 32x32x16 |
-|     	| Batch Normalization	| 0.9997 Moving Average Decay  |
-|     	| RELU	|   |
-|     	| Convolution 5x5 | 1x1 stride, outputs 32x32x32 |
-|     	| Batch Normalization	| 0.9997 Moving Average Decay  |
-|     	| RELU	|   |
-| Inception (branch pool)      | Average Pooling 3x3	| 1x1 stride, outputs 32x32x3 |
+|     	| ELU	|   |
 |     	| Convolution 3x3 | 1x1 stride, outputs 32x32x16 |
 |     	| Batch Normalization	| 0.9997 Moving Average Decay  |
-|     	| RELU	|   |
-| Concatenation |   | Concatenate all the branches to 32x32x96 |
-| Dropout       |   |     |
-| Inception (branch 1x1)     	| Convolution 1x1	| 1x1 stride, outputs 32x32x16  |
+|     	| ELU	|   |
+|       | Convolution 3x3 | 2x2 stride, outputs 16x16x16 |
 |     	| Batch Normalization	| 0.9997 Moving Average Decay  |
-|     	| RELU	|   |
-| Inception (branch 3x3)      | Convolution 1x1	| 1x1 stride, outputs 32x32x16 |
-|     	| Batch Normalization	| 0.9997 Moving Average Decay  |
-|     	| RELU	|   |
-|     	| Convolution 3x3 | 1x1 stride, outputs 32x32x32 |
-|     	| Batch Normalization	| 0.9997 Moving Average Decay  |
-|     	| RELU	|   |
-|       | Convolution 3x3 | 1x1 stride, outputs 32x32x32 |
-|     	| Batch Normalization	| 0.9997 Moving Average Decay  |
-|     	| RELU	|   |
+|     	| ELU	|   |
 | Inception (branch 5x5)      | Convolution 1x1	| 1x1 stride, outputs 32x32x16 |
 |     	| Batch Normalization	| 0.9997 Moving Average Decay  |
-|     	| RELU	|   |
-|     	| Convolution 5x5 | 1x1 stride, outputs 32x32x32 |
+|     	| ELU	|   |
+|     	| Convolution 5x5 | 2x2 stride, outputs 16x16x16 |
 |     	| Batch Normalization	| 0.9997 Moving Average Decay  |
-|     	| RELU	|   |
+|     	| ELU	|   |
 | Inception (branch pool)      | Average Pooling 3x3	| 1x1 stride, outputs 32x32x3 |
-|     	| Convolution 3x3 | 1x1 stride, outputs 32x32x16 |
+|     	| Convolution 3x3 | 2x2 stride, outputs 16x16x16 |
 |     	| Batch Normalization	| 0.9997 Moving Average Decay  |
-|     	| RELU	|   |
-| Concatenation |   | Concatenate all the branches to 32x32x96 |
-| Inception (branch 1x1)     	| Convolution 1x1	| 2x2 stride, outputs 16x16x32  |
+|     	| ELU	|   |
+| Concatenation |   | Concatenate all the branches to 16x16x64 |
+| Inception (branch 1x1)     	| Convolution 1x1	| 2x2 stride, outputs 8x8x32  |
 |     	| Batch Normalization	| 0.9997 Moving Average Decay  |
-|     	| RELU	|   |
-| Inception (branch 3x3)      | Convolution 1x1	| 1x1 stride, outputs 32x32x32 |
-|     	| Batch Normalization	| 0.9997 Moving Average Decay  |
-|     	| RELU	|   |
-|     	| Convolution 3x3 | 1x1 stride, outputs 32x32x64 |
-|     	| Batch Normalization	| 0.9997 Moving Average Decay  |
-|     	| RELU	|   |
-|       | Convolution 3x3 | 2x2 stride, outputs 16x16x64 |
-|     	| Batch Normalization	| 0.9997 Moving Average Decay  |
-|     	| RELU	|   |
-| Inception (branch 5x5)      | Convolution 1x1	| 1x1 stride, outputs 32x32x32 |
-|     	| Batch Normalization	| 0.9997 Moving Average Decay  |
-|     	| RELU	|   |
-|     	| Convolution 5x5 | 2x2 stride, outputs 16x16x64 |
-|     	| Batch Normalization	| 0.9997 Moving Average Decay  |
-|     	| RELU	|   |
-| Inception (branch pool)      | Average Pooling 3x3	| 1x1 stride, outputs 32x32x96 |
-|     	| Convolution 3x3 | 2x2 stride, outputs 16x16x32 |
-|     	| Batch Normalization	| 0.9997 Moving Average Decay  |
-|     	| RELU	|   |
-| Concatenation |   | Concatenate all the branches to 16x16x192 |
-| Dropout       |   |     |
-| Inception (branch 1x1)     	| Convolution 1x1	| 1x1 stride, outputs 16x16x32  |
-|     	| Batch Normalization	| 0.9997 Moving Average Decay  |
-|     	| RELU	|   |
+|     	| ELU	|   |
 | Inception (branch 3x3)      | Convolution 1x1	| 1x1 stride, outputs 16x16x32 |
 |     	| Batch Normalization	| 0.9997 Moving Average Decay  |
-|     	| RELU	|   |
-|     	| Convolution 3x3 | 1x1 stride, outputs 16x16x64 |
-|     	| Batch Normalization	| 0.9997 Moving Average Decay  |
-|     	| RELU	|   |
-|       | Convolution 3x3 | 1x1 stride, outputs 16x16x64 |
-|     	| Batch Normalization	| 0.9997 Moving Average Decay  |
-|     	| RELU	|   |
-| Inception (branch 5x5)      | Convolution 1x1	| 1x1 stride, outputs 16x16x32 |
-|     	| Batch Normalization	| 0.9997 Moving Average Decay  |
-|     	| RELU	|   |
-|     	| Convolution 5x5 | 1x1 stride, outputs 16x16x64 |
-|     	| Batch Normalization	| 0.9997 Moving Average Decay  |
-|     	| RELU	|   |
-| Inception (branch pool)      | Average Pooling 3x3	| 1x1 stride, outputs 16x16x192 |
+|     	| ELU	|   |
 |     	| Convolution 3x3 | 1x1 stride, outputs 16x16x32 |
 |     	| Batch Normalization	| 0.9997 Moving Average Decay  |
-|     	| RELU	|   |
-| Concatenation |   | Concatenate all the branches to 16x16x192 |
-| Inception (branch 1x1)     	| Convolution 1x1	| 2x2 stride, outputs 8x8x64  |
+|     	| ELU	|   |
+|       | Convolution 3x3 | 2x2 stride, outputs 8x8x32 |
 |     	| Batch Normalization	| 0.9997 Moving Average Decay  |
-|     	| RELU	|   |
-| Inception (branch 3x3)      | Convolution 1x1	| 1x1 stride, outputs 16x16x64 |
+|     	| ELU	|   |
+| Inception (branch 5x5)      | Convolution 1x1	| 1x1 stride, outputs 8x8x32 |
 |     	| Batch Normalization	| 0.9997 Moving Average Decay  |
-|     	| RELU	|   |
-|     	| Convolution 3x3 | 1x1 stride, outputs 16x16x128 |
+|     	| ELU	|   |
+|     	| Convolution 5x5 | 2x2 stride, outputs 8x8x32 |
 |     	| Batch Normalization	| 0.9997 Moving Average Decay  |
-|     	| RELU	|   |
-|       | Convolution 3x3 | 2x2 stride, outputs 8x8x128 |
+|     	| ELU	|   |
+| Inception (branch pool)      | Average Pooling 3x3	| 1x1 stride, outputs 16x16x32 |
+|     	| Convolution 3x3 | 2x2 stride, outputs 8x8x32 |
 |     	| Batch Normalization	| 0.9997 Moving Average Decay  |
-|     	| RELU	|   |
-| Inception (branch 5x5)      | Convolution 1x1	| 1x1 stride, outputs 16x16x64 |
+|     	| ELU	|   |
+| Concatenation |   | Concatenate all the branches to 8x8x128 |
+| Max Pool |  | outputs 4x4x128 |
+| Inception (branch 1x1)     	| Convolution 1x1	| 2x2 stride, outputs 2x2x64  |
 |     	| Batch Normalization	| 0.9997 Moving Average Decay  |
-|     	| RELU	|   |
-|     	| Convolution 5x5 | 2x2 stride, outputs 8x8x128 |
+|     	| ELU	|   |
+| Inception (branch 3x3)      | Convolution 1x1	| 1x1 stride, outputs 4x4x64 |
 |     	| Batch Normalization	| 0.9997 Moving Average Decay  |
-|     	| RELU	|   |
-| Inception (branch pool)      | Average Pooling 3x3	| 1x1 stride, outputs 16x16x192 |
-|     	| Convolution 3x3 | 2x2 stride, outputs 8x8x64 |
+|     	| ELU	|   |
+|     	| Convolution 3x3 | 1x1 stride, outputs 4x4x64 |
 |     	| Batch Normalization	| 0.9997 Moving Average Decay  |
-|     	| RELU	|   |
-| Concatenation |   | Concatenate all the branches to 8x8x384 |
-| Dropout       |   |     |
-| Inception (branch 1x1)     	| Convolution 1x1	| 1x1 stride, outputs 8x8x64  |
+|     	| ELU	|   |
+|       | Convolution 3x3 | 2x2 stride, outputs 2x2x64 |
 |     	| Batch Normalization	| 0.9997 Moving Average Decay  |
-|     	| RELU	|   |
-| Inception (branch 3x3)      | Convolution 1x1	| 1x1 stride, outputs 8x8x64 |
+|     	| ELU	|   |
+| Inception (branch 5x5)      | Convolution 1x1	| 1x1 stride, outputs 4x4x64 |
 |     	| Batch Normalization	| 0.9997 Moving Average Decay  |
-|     	| RELU	|   |
-|     	| Convolution 3x3 | 1x1 stride, outputs 8x8x128 |
+|     	| ELU	|   |
+|     	| Convolution 5x5 | 2x2 stride, outputs 2x2x64 |
 |     	| Batch Normalization	| 0.9997 Moving Average Decay  |
-|     	| RELU	|   |
-|       | Convolution 3x3 | 1x1 stride, outputs 8x8x128 |
+|     	| ELU	|   |
+| Inception (branch pool)      | Average Pooling 3x3	| 1x1 stride, outputs 4x4x64 |
+|     	| Convolution 3x3 | 2x2 stride, outputs 2x2x64 |
 |     	| Batch Normalization	| 0.9997 Moving Average Decay  |
-|     	| RELU	|   |
-| Inception (branch 5x5)      | Convolution 1x1	| 1x1 stride, outputs 8x8x64 |
-|     	| Batch Normalization	| 0.9997 Moving Average Decay  |
-|     	| RELU	|   |
-|     	| Convolution 5x5 | 1x1 stride, outputs 8x8x128 |
-|     	| Batch Normalization	| 0.9997 Moving Average Decay  |
-|     	| RELU	|   |
-| Inception (branch pool)      | Average Pooling 3x3	| 1x1 stride, outputs 8x8x192 |
-|     	| Convolution 3x3 | 1x1 stride, outputs 8x8x64 |
-|     	| Batch Normalization	| 0.9997 Moving Average Decay  |
-|     	| RELU	|   |
-| Concatenation |   | Concatenate all the branches to 8x8x384 |
-| Dropout       |   |     |
-| Inception (branch 1x1)     	| Convolution 1x1	| 2x2 stride, outputs 4x4x128  |
-|     	| Batch Normalization	| 0.9997 Moving Average Decay  |
-|     	| RELU	|   |
-| Inception (branch 3x3)      | Convolution 1x1	| 1x1 stride, outputs 8x8x128 |
-|     	| Batch Normalization	| 0.9997 Moving Average Decay  |
-|     	| RELU	|   |
-|     	| Convolution 3x3 | 1x1 stride, outputs 8x8x128 |
-|     	| Batch Normalization	| 0.9997 Moving Average Decay  |
-|     	| RELU	|   |
-|       | Convolution 3x3 | 2x2 stride, outputs 4x4x256 |
-|     	| Batch Normalization	| 0.9997 Moving Average Decay  |
-|     	| RELU	|   |
-| Inception (branch 5x5)      | Convolution 1x1	| 1x1 stride, outputs 8x8x128 |
-|     	| Batch Normalization	| 0.9997 Moving Average Decay  |
-|     	| RELU	|   |
-|     	| Convolution 5x5 | 2x2 stride, outputs 4x4x256 |
-|     	| Batch Normalization	| 0.9997 Moving Average Decay  |
-|     	| RELU	|   |
-| Inception (branch pool)      | Average Pooling 3x3	| 1x1 stride, outputs 8x8x384 |
-|     	| Convolution 3x3 | 2x2 stride, outputs 4x4x128 |
-|     	| Batch Normalization	| 0.9997 Moving Average Decay  |
-|     	| RELU	|   |
-| Concatenation |   | Concatenate all the branches to 4x4x768 |
-| Dropout       |   |     |
-| Inception (branch 1x1)     	| Convolution 1x1	| 1x1 stride, outputs 4x4x128  |
-|     	| Batch Normalization	| 0.9997 Moving Average Decay  |
-|     	| RELU	|   |
-| Inception (branch 3x3)      | Convolution 1x1	| 1x1 stride, outputs 4x4x128 |
-|     	| Batch Normalization	| 0.9997 Moving Average Decay  |
-|     	| RELU	|   |
-|     	| Convolution 3x3 | 1x1 stride, outputs 4x4x256 |
-|     	| Batch Normalization	| 0.9997 Moving Average Decay  |
-|     	| RELU	|   |
-|       | Convolution 3x3 | 1x1 stride, outputs 4x4x256 |
-|     	| Batch Normalization	| 0.9997 Moving Average Decay  |
-|     	| RELU	|   |
-| Inception (branch 5x5)      | Convolution 1x1	| 1x1 stride, outputs 4x4x128 |
-|     	| Batch Normalization	| 0.9997 Moving Average Decay  |
-|     	| RELU	|   |
-|     	| Convolution 5x5 | 1x1 stride, outputs 4x4x256 |
-|     	| Batch Normalization	| 0.9997 Moving Average Decay  |
-|     	| RELU	|   |
-| Inception (branch pool)      | Average Pooling 3x3	| 1x1 stride, outputs 4x4x768 |
-|     	| Convolution 3x3 | 1x1 stride, outputs 4x4x128 |
-|     	| Batch Normalization	| 0.9997 Moving Average Decay  |
-|     	| RELU	|   |
-| Concatenation |   | Concatenate all the branches to 4x4x768 |
-| Inception (branch 1x1)     	| Convolution 1x1	| 2x2 stride, outputs 2x2x256  |
-|     	| Batch Normalization	| 0.9997 Moving Average Decay  |
-|     	| RELU	|   |
-| Inception (branch 3x3)      | Convolution 1x1	| 1x1 stride, outputs 4x4x256 |
-|     	| Batch Normalization	| 0.9997 Moving Average Decay  |
-|     	| RELU	|   |
-|     	| Convolution 3x3 | 1x1 stride, outputs 4x4x256 |
-|     	| Batch Normalization	| 0.9997 Moving Average Decay  |
-|     	| RELU	|   |
-|       | Convolution 3x3 | 2x2 stride, outputs 2x2x512 |
-|     	| Batch Normalization	| 0.9997 Moving Average Decay  |
-|     	| RELU	|   |
-| Inception (branch 5x5)      | Convolution 1x1	| 1x1 stride, outputs 4x4x256 |
-|     	| Batch Normalization	| 0.9997 Moving Average Decay  |
-|     	| RELU	|   |
-|     	| Convolution 5x5 | 2x2 stride, outputs 2x2x512 |
-|     	| Batch Normalization	| 0.9997 Moving Average Decay  |
-|     	| RELU	|   |
-| Inception (branch pool)      | Average Pooling 3x3	| 1x1 stride, outputs 4x4x768 |
-|     	| Convolution 3x3 | 2x2 stride, outputs 2x2x512 |
-|     	| Batch Normalization	| 0.9997 Moving Average Decay  |
-|     	| RELU	|   |
-| Concatenation |   | Concatenate all the branches to 2x2x1536 |
-| Dropout       |   |     |
-| Average Pool 2x2  |   | 2x2 stride, outputs 1x1x1536|
+|     	| ELU	|   |
+| Concatenation |   | Concatenate all the branches to 2x2x256 |
+| Average Pool 2x2  |   | 2x2 stride, outputs 1x1x256|
 | Dropout       |   |     |
 | Fully connected   |   | Outputs 43 									|
 | Softmax   				|   | -       									|
+
+The model graph drawn by TensorBoard is as follow:
+
+![model graph][model_graph]
 
 ####4. Describe how, and identify where in your code, you trained your model. The discussion can include the type of optimizer, the batch size, number of epochs and any hyperparameters such as learning rate.
 
@@ -327,7 +175,7 @@ In the seventh cell, the code is about evaluation of model. These code are simil
 
 In the eighth cell, the code is about the real work of training.
 * The batch size is set to 512. I am training the model on Nvidia Titan X, which can provide great power.
-* The epoch number is set to 100. Because the final version of model is a big model, which need more epochs to train.
+* The epoch number is set to 120. Because the final version of model is a big model, which need more epochs to train. After some time of training, I found that the maximum accuracy of my model is around 96%, so I set a threshold that will break the training loop when the validation accuracy is above 96%.
 * The variables `losses`, `validation_accuracies`, `train_accuracies` are used to record the trending of loss and accuracy during training.
 * For each epoch, calling `shuffle` to randomize the training dataset.
 * Splitting batches and training them are similar to the code in LeNet in the course.
@@ -340,9 +188,9 @@ In the eighth cell, the code is about the real work of training.
 The code for calculating the accuracy of the model is located in the ninth cell of the Ipython notebook.
 
 My final model results were:
-* training set accuracy of ?
-* validation set accuracy of ?
-* test set accuracy of ?
+* training set accuracy of ? 99.99%
+* validation set accuracy of ? 96.12%
+* test set accuracy of ? 95.2%
 
 If an iterative approach was chosen:
 * What was the first architecture that was tried and why was it chosen?
@@ -357,11 +205,7 @@ As the paper "Traffic Sign Recognition with Multi-Scale Convolutional Networks" 
 
 The first attempt was to add more convolutional layers. I tried 9 convolutional layers and the performance get improved. As the diagram shows below, the training accuracy and validation accuracy are higher than original LeNet model. But the gap between training accuracy and validation is to big. So that's where I came up with regularization.
 
-** TODO: add diagram here **
-
-As what I have learned in [Stanford CS231n](http://cs231n.stanford.edu/), when the ConvNet goes deeper, the classic L2 regularization do not work well. Instead, I decided to use batch normalization and dropout to avoid overfitting. So I got the third model as follows:
-
-** TODO: add diagram here **
+As what I have learned in [Stanford CS231n](http://cs231n.stanford.edu/), when the ConvNet goes deeper, the classic L2 regularization do not work well. Instead, I decided to use batch normalization and dropout to avoid overfitting. Actually, I tried dropout and regularization together, but it turned out to be not very good.
 
 I think the capability still has space to improve, so I decided to involve a more complicated model, inception, which is mentioned in the lecture video. Then after many tuning, I got the final model.
 
@@ -371,14 +215,14 @@ When adjusting my model, I followed some rules:
 
 1. If the model is under fitting, which means the training accuracy is low, then enlarge the capability of the model, by adding more convolution layers, adding more neurons in some layers, reducing pooling layers, or using more complicated model, such as inception.
 2. If the model is over fitting, which means the gap between training accuracy and validation accuracy is high, then adding more regularization, by adding more dropout layers, or lower the dropout keeping probability.
-3. Another thing worth to be aware of is the weight initialization. Since we use batch normalization, so we just use truncated normal initialization instead Xavier initialization. I set the mean to 0.01 instead of 0 to avoid dead neuron, because I use RELU as activation function. Actually, I tried ELU to replace RELU, but it did not prove to be helpful.
+3. Another thing worth to be aware of is the weight initialization. Since we use batch normalization, so we just use truncated normal initialization instead Xavier initialization. I choose to use ELU as activation function instead of RELU, which can back propagate even when the output of a neuron is negative. So I set the mean of weight initialization as 0.
 
 * Which parameters were tuned? How were they adjusted and why?
 
 To be honest, I did not tune hyperparameters very carefully. What I have done is just as follows:
 
 1. Try some different learning rate (0.01, 0.001, 0.0001).
-2. Try some different dropout keep probability (0.5, 0.6. 0,7, 0.8).
+2. Try some different dropout keep probability (0.4, 0.5, 0.6. 0,7, 0.8). The final keep probability is 0.4.
 3. Try some different number of epochs (10, 50, 100, 200).
 
 I know I should try different combination of these parameters, but the time is limited, so I just choose a looks-better set of parameters.
@@ -397,61 +241,49 @@ When I was tuning the model, I found that I need to decide what the filter size 
 
 The validation accuracy is around 97%, and test accuracy is around 97%, which is much higher than the prior models. Considering that I did not use some complex preprocessing black magic, I am satisfied with this result.
 
-###Test a Model on New Images
+### Test a Model on New Images
 
-####1. Choose five German traffic signs found on the web and provide them in the report. For each image, discuss what quality or qualities might be difficult to classify.
+#### 1. Choose five German traffic signs found on the web and provide them in the report. For each image, discuss what quality or qualities might be difficult to classify.
 
 Here are five German traffic signs that I found on the web:
 
 ![alt text][sign1] ![alt text][sign2] ![alt text][sign3]
-![alt text][sign4] ![alt text][sign5] ![alt text][sign6]
-![alt text][sign7] ![alt text][sign8] ![alt text][sign9]
-![alt text][sign10]
+![alt text][sign4] ![alt text][sign5]
 
-Because the model only consume images with 32x32x3 size, before testing with them, I resized them to 32x32x3 using `PIL.Image.resize`. The resized images are as follows:
-
-![alt text][sign1-r] ![alt text][sign2-r] ![alt text][sign3-r]
-![alt text][sign4-r] ![alt text][sign5-r] ![alt text][sign6-r]
-![alt text][sign7-r] ![alt text][sign8-r] ![alt text][sign9-r]
-![alt text][sign10-r]
+Because our model only consume images with size 32x32x3, so these images are resized.
 
 There are some challenges to test the model on these images:
 
-1. Some signs are not in the training set, such as No.2, No.3, No.4, and No.6.
-2. After resized, the signs are not very clear, such as No.2, No.5, No.8 and No.9.
-3. The sign are not segmented as well as training data, such as No.5, No.8, No.9 and No.10.
-4. Some of the images has watermark on them, which may affect the accuracy of recognition.
+1. After resizing, the signs are not as clear as they used to be.
+2. Some of the images has watermark on them, which may affect the accuracy of recognition.
 
-####2. Discuss the model's predictions on these new traffic signs and compare the results to predicting on the test set. Identify where in your code predictions were made. At a minimum, discuss what the predictions were, the accuracy on these new predictions, and compare the accuracy to the accuracy on the test set (OPTIONAL: Discuss the results in more detail as described in the "Stand Out Suggestions" part of the rubric).
+#### 2. Discuss the model's predictions on these new traffic signs and compare the results to predicting on the test set. Identify where in your code predictions were made. At a minimum, discuss what the predictions were, the accuracy on these new predictions, and compare the accuracy to the accuracy on the test set (OPTIONAL: Discuss the results in more detail as described in the "Stand Out Suggestions" part of the rubric).
 
-The code for making predictions on my final model is located in the tenth cell of the Ipython notebook.
+The code for making predictions on my final model is located in the 11th, 12th, and 13th cells of the Ipython notebook.
 
 Here are the results of the prediction:
 
 | Image			        |     Prediction	        					|
 |:---------------------:|:---------------------------------------------:|
-| Stop Sign      		| Stop sign   									|
-| U-turn     			| U-turn 										|
-| Yield					| Yield											|
-| 100 km/h	      		| Bumpy Road					 				|
-| Slippery Road			| Slippery Road      							|
+| Speed limit (30km/h)      		| Speed limit (30km/h) 									|
+| Speed limit (100km/h)     		| Speed limit (30km/h) 										|
+| Vehicles over 3.5 metric tons prohibited					| Stop											|
+| Road work	      		| Road work					 				|
+| Pedestrians			| Pedestrians      							|
 
 
-The model was able to correctly guess 4 of the 5 traffic signs, which gives an accuracy of 80%. This compares favorably to the accuracy on the test set of ...
+The model was able to correctly guess 3 of the 5 traffic signs, which gives an accuracy of 60%. This compares not very favorably to the accuracy on the test set of 95.2%.
 
-####3. Describe how certain the model is when predicting on each of the five new images by looking at the softmax probabilities for each prediction and identify where in your code softmax probabilities were outputted. Provide the top 5 softmax probabilities for each image along with the sign type of each probability. (OPTIONAL: as described in the "Stand Out Suggestions" part of the rubric, visualizations can also be provided such as bar charts)
+#### 3. Describe how certain the model is when predicting on each of the five new images by looking at the softmax probabilities for each prediction and identify where in your code softmax probabilities were outputted. Provide the top 5 softmax probabilities for each image along with the sign type of each probability. (OPTIONAL: as described in the "Stand Out Suggestions" part of the rubric, visualizations can also be provided such as bar charts)
 
-The code for making predictions on my final model is located in the 11th cell of the Ipython notebook.
+The code for making predictions on my final model is located in the 14th cell of the Ipython notebook.
 
-For the first image, the model is relatively sure that this is a stop sign (probability of 0.6), and the image does contain a stop sign. The top five soft max probabilities were
+![top 5 predictions][top5]
 
-| Probability         	|     Prediction	        					|
-|:---------------------:|:---------------------------------------------:|
-| .60         			| Stop sign   									|
-| .20     				| U-turn 										|
-| .05					| Yield											|
-| .04	      			| Bumpy Road					 				|
-| .01				    | Slippery Road      							|
+For the 1st and 4th images, the model is very confidently predict to be the correct answer.
 
+For the 2nd image, the model is pretty confident to be a 30km/h limit sign, while it is a 100km/h limit sign. The sign is segmented from a image containing many different signs. We can still see part of another sign in the left of the image. So I guess these parts may mislead the model to achieve the correct answer.
 
-For the second image ...
+For the 3rd image, the model predict it to be "Vehicles over 3.5 metric tons prohibited" sign, which is correct, as the second high result. I think the image is pretty clear that it is not a "Stop" sign. I have not figured it out.
+
+For the 5th image, the model is not very confident about the prediction, but luckily, it got the right answer.
