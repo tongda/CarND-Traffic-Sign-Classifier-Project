@@ -85,7 +85,7 @@ My final model consisted of the following layers:
 
 | Layer         		| Sublayer  |     Description	        					|
 |:---------------------:|:-:|:---------------------------------------------:|
-| Input         		| | 32x32x3 RGB image   							|
+| Input         		| | 32x32x4 RGB image   							|
 | Inception (branch 1x1)     	| Convolution 1x1	| 2x2 stride, outputs 16x16x16  |
 |     	| Batch Normalization	| 0.9997 Moving Average Decay  |
 |     	| ELU	|   |
@@ -175,7 +175,7 @@ In the seventh cell, the code is about evaluation of model. These code are simil
 
 In the eighth cell, the code is about the real work of training.
 * The batch size is set to 512. I am training the model on Nvidia Titan X, which can provide great power.
-* The epoch number is set to 120. Because the final version of model is a big model, which need more epochs to train. After some time of training, I found that the maximum accuracy of my model is around 96%, so I set a threshold that will break the training loop when the validation accuracy is above 96%.
+* The epoch number is set to 200. Because the final version of model is a big model, which need more epochs to train. After some time of training, I found that the maximum accuracy of my model is around 96%, so I set a threshold that will break the training loop when the validation accuracy is above 96%. *Interesting thing here. In my previous submission, I forgot to involve grayscale when doing preprocessing, then it took about 180 epochs to reach more than 96% validation accuracy. After I add it back, It took only 137 epochs to reach more than 96% validation accuracy. I believe that adding grayscale help the model find insight more quickly.*
 * The variables `losses`, `validation_accuracies`, `train_accuracies` are used to record the trending of loss and accuracy during training.
 * For each epoch, calling `shuffle` to randomize the training dataset.
 * Splitting batches and training them are similar to the code in LeNet in the course.
@@ -267,12 +267,14 @@ Here are the results of the prediction:
 |:---------------------:|:---------------------------------------------:|
 | Speed limit (30km/h)      		| Speed limit (30km/h) 									|
 | Speed limit (100km/h)     		| Speed limit (30km/h) 										|
-| Vehicles over 3.5 metric tons prohibited					| Stop											|
+| Vehicles over 3.5 metric tons prohibited					| Vehicles over 3.5 metric tons prohibited											|
 | Road work	      		| Road work					 				|
-| Pedestrians			| Pedestrians      							|
+| Pedestrians			| General caution      							|
 
 
-The model was able to correctly guess 3 of the 5 traffic signs, which gives an accuracy of 60%. This compares not very favorably to the accuracy on the test set of 95.2%.
+The model was able to correctly guess 3 of the 5 traffic signs, which gives an accuracy of 60%. This compares not very favorably to the accuracy on the test set of 95.0%.
+
+*This result is different from my previous submission. In the previous version, the model can correctly predict the "Pedestrians" sign, and failed at "Vehicles over 3.5 metric tons prohibited" sign. But as a whole, the accuracy are the same.*
 
 #### 3. Describe how certain the model is when predicting on each of the five new images by looking at the softmax probabilities for each prediction and identify where in your code softmax probabilities were outputted. Provide the top 5 softmax probabilities for each image along with the sign type of each probability. (OPTIONAL: as described in the "Stand Out Suggestions" part of the rubric, visualizations can also be provided such as bar charts)
 
